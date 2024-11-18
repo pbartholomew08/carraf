@@ -33,9 +33,9 @@ TEST_CASE("Basic")
 
   // Check that memory contents matches expectation 0..n-1
   ctr = 0;
-  for (const auto it : arr)
+  for (const auto itr : arr)
   {
-    REQUIRE(it == ctr);
+    REQUIRE(itr == ctr);
     ctr++;
   }
 }

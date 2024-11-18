@@ -255,6 +255,10 @@ CheckOptions:
     value:           '800'
   - key:             readability-function-size.VariableThreshold
     value:           '4294967295'
+  - key:             readability-identifier-length.IgnoredParameterNames
+    value:           '^[ijkn]$|^[n][xyz]$'
+  - key:             readability-identifier-length.IgnoredVariableNames
+    value:           '^[n][xyz]$'
   - key:             readability-identifier-naming.IgnoreFailedSplit
     value:           '0'
   - key:             readability-implicit-bool-conversion.AllowIntegerConditions

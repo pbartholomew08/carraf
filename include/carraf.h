@@ -28,8 +28,8 @@ namespace caf
      */
     CarraF(const size_t nx, const size_t ny, const size_t nz) : nx(nx), ny(ny), nz(nz)
     {
-      const size_t n = nx * ny * nz;
-      v.resize(n);
+      const size_t nelt = nx * ny * nz;
+      v.resize(nelt);
     }
 
     /**
@@ -48,7 +48,7 @@ namespace caf
     }
 
     /**
-     * Returns an iterator to the beginning of the underlying storage.
+     * @returns The iterator to the beginning of the underlying storage.
      */
     [[nodiscard]] auto begin()
     {
@@ -56,7 +56,7 @@ namespace caf
     }
 
     /**
-     * Returns the end iterator of the underlying storage.
+     * @returns The end iterator of the underlying storage.
      */
     [[nodiscard]] auto end()
     {
