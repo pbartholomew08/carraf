@@ -15,9 +15,49 @@
 namespace caf
 {
   /**
-   * The CarraF 3-D array type.
+   * A utility type representing a 3-D index (i, j, k).
    */
-  template <class T>
+  struct indices : public std::array<size_t, 3>
+  {
+  };
+
+  /**
+   * A utility type representing the extents of a 3-D array (nx, ny, nz).
+   */
+  struct extents : public std::array<size_t, 3>
+  {
+  };
+
+  /**
+   * A functor class implementing the mapping from coordinates (i,j,k) -> 1-D offset in C ordering.
+   */
+  class cindexer
+  {
+   public:
+    [[nodiscard]] size_t operator()(const indices idx, const extents n)
+    {
+      return idx[0] * n[1] * n[2] + idx[1] * n[2] + idx[2];
+    }
+  };
+
+  /**
+   * A functor class implementing the mapping from coordinates (i,j,k) -> 1-D offset in Fortran ordering.
+   */
+  class findexer
+  {
+   public:
+    [[nodiscard]] size_t operator()(const indices idx, const extents n)
+    {
+      return idx[0] + idx[1] * n[0] + idx[2] * n[0] * n[1];
+    }
+  };
+
+  /**
+   * The CarraF 3-D array type.
+   * @param T The storage type for the array.
+   * @param I The indexer class, used to determine the storage ordering.
+   */
+  template <class T, class I>
   class CarraF
   {
    public:
@@ -26,10 +66,9 @@ namespace caf
      * @param ny The array extent in y.
      * @param nz The array extent in z.
      */
-    CarraF(const size_t nx, const size_t ny, const size_t nz) : nx(nx), ny(ny), nz(nz)
+    CarraF(const size_t nx, const size_t ny, const size_t nz) : n{nx, ny, nz}
     {
-      const size_t nelt = nx * ny * nz;
-      v.resize(nelt);
+      v.resize(nx * ny * nz);
     }
 
     /**
@@ -42,9 +81,7 @@ namespace caf
      */
     [[nodiscard]] T& operator()(const size_t i, const size_t j, const size_t k)
     {
-      const size_t idx = i * ny * nz + j * nz + k;
-
-      return v[idx];
+      return v[idx(indices{i, j, k}, n)];
     }
 
     /**
@@ -64,8 +101,9 @@ namespace caf
     }
 
    private:
-    size_t nx, ny, nz;
+    extents n;
     std::vector<T> v;
+    I idx;  // Index object
   };
 }  // namespace caf
 
