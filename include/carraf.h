@@ -33,12 +33,12 @@ namespace caf
     }
 
     /**
-     * Array subscript accessor.
+     * Element-wise accessor supporting returning and assigning values.
      *
      * @param i The "x axis" index.
      * @param j The "y axis" index.
      * @param k The "z axis" index.
-     * @returns A reference to the array entry, allowing use as a value and in assignments.
+     * @returns A reference to the array entry.
      */
     [[nodiscard]] T& operator()(const size_t i, const size_t j, const size_t k)
     {
