@@ -12,27 +12,35 @@
 
 TEST_CASE("Basic")
 {
-  // Create a 3-D array with entries 0..n-1 in C-ordering
   const size_t nx = 4;
   const size_t ny = 5;
   const size_t nz = 7;
-  
-  caf::CarraF<int> arr(nx, ny, nz);
-  int ctr = 0;
-  for (size_t i = 0; i < nx; i++)
+
+  // Create a 3-D array with entries 0..n-1 in C-ordering.
+  // This illustrates both how to set values by element access, and constructing a const initialised
+  // CarraF array through an immediately invoked lambda.
+  // XXX: A constructor overload could take an `init` lambda to achieve the same thing.
+  const caf::CarraF<int> arr = []()
   {
-    for (size_t j = 0; j < ny; j++)
+    caf::CarraF<int> arr(nx, ny, nz);
+    int ctr = 0;
+    for (size_t i = 0; i < nx; i++)
     {
-      for (size_t k = 0; k < nz; k++)
+      for (size_t j = 0; j < ny; j++)
       {
-	arr(i, j, k) = ctr;
-	ctr++;
+        for (size_t k = 0; k < nz; k++)
+        {
+          arr(i, j, k) = ctr;
+          ctr++;
+        }
       }
     }
-  }
 
-  // Check that memory contents matches expectation 0..n-1
-  ctr = 0;
+    return arr;
+  }();
+
+  // Sequential memory accesses should count from 0..n-1 based on the initialisation.
+  int ctr = 0;
   for (const auto itr : arr)
   {
     REQUIRE(itr == ctr);

@@ -50,7 +50,7 @@ namespace caf
     /**
      * @returns The iterator to the beginning of the underlying storage.
      */
-    [[nodiscard]] auto begin()
+    [[nodiscard]] auto begin() const
     {
       return v.begin();
     }
@@ -58,7 +58,7 @@ namespace caf
     /**
      * @returns The end iterator of the underlying storage.
      */
-    [[nodiscard]] auto end()
+    [[nodiscard]] auto end() const
     {
       return v.end();
     }
